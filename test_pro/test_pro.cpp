@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -250,9 +250,9 @@ int main()
 	read_default(exe_path, file_dir, filename_extension, start_num, end_num, diff_option);
 
 	cout << "options:\n";
-	cout << "-e\tThe full path of the exe\n";
-	cout << "-d\tSet the test files directorty\n";
-	cout << "-f\tSet the file extension of the test files\n";
+	cout << "-e\tThe full path to the exe\n";
+	cout << "-d\tSet directorty of test files \n";
+	cout << "-f\tSet the file extension of test files\n";
 	cout << "-r\tSet the start file name and the end file name.\n\tThe program will test them in sequence. If start > end, the program won't test them.\n";
 	cout << "-s\tInput arbitrary test files. The program will test them one by one.\n";
 	cout << "-c\tSet the option of diff. If it is \"N\" or \"n\", the program will use\n\tits own compare function, which is less powerful.\n";
