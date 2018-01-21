@@ -1,18 +1,9 @@
 # test_pro
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> b46eb14... all prepared
 A program to test your promgram.
 
 ## Getting Started
 
-<<<<<<< HEAD
 You need to write some settings in the ```default.dat```. The program will read the data when initializing.
-=======
-You need to write some settings in the "default.dat”. The program will read the data when initializing.
->>>>>>> b46eb14... all prepared
 ### Set the default.dat
 The first line should be "test_pro" and its version.
 ```
@@ -32,19 +23,15 @@ You can also use pipeline | to redirect the output to another command. For insta
 ```
 It will use diff to compare answers, and if they are incorrect, it will output the first 10 lines.
 
-<<<<<<< HEAD
 ### Note
 For Windows users, since you don't have diff, you can't use the diff feature. But you can copy the ```diff.exe``` from git bash, and then save it in the ```bin``` folder. You must put that folder into the same directory of test_pro.
 
-=======
->>>>>>> b46eb14... all prepared
 ## Compilation
 
 Use the [makefile]( https://github.com/andy94077/test_pro/blob/master/test_pro/makefile).
 
 ## Examples
 To learn more about the examples, check out [example]( https://github.com/andy94077/test_pro/tree/master/example)
-<<<<<<< HEAD
 
 * We have a program to be tested: ```~/swap_number```
 * We have some test files, which save in ```~/test files```
@@ -52,13 +39,6 @@ To learn more about the examples, check out [example]( https://github.com/andy94
 * We need to test them from 0.in to 5.in.
 * The diff options are ```-Z -y -W80 --suppress-common-lines```
 
-=======
-We have a program to be tested: ```~/swap_number```
-We have some test files, which save in ```~/test files```
-The filename extension of test files is ```.in```
-We need to test them from 0.in to 5.in.  and we want it to test 5.in and 3.in twice.
-The diff options are ```-Z -y -W80 --suppress-common-lines```
->>>>>>> b46eb14... all prepared
 Therefore, the default.dat will be,
 ```
 test_pro 2.0
@@ -68,11 +48,7 @@ test_pro 2.0
 0 5
 -Z -y -W80 --suppress-common-lines
 ```
-<<<<<<< HEAD
 And then we run test_pro. Assume that we want to test 5.in and 3.in twice. So we type ```-s 5 3```, and type ```r``` to start testing.
-=======
-And then we run test_pro, type ```-s 5 3```, and type ```r``` to start testing.
->>>>>>> b46eb14... all prepared
 test_pro will show you which ones are incorrect, and which ones are accepted.
 
 ## History
@@ -84,7 +60,3 @@ I major in computer science at National Taiwan University, and I did some progra
 * Stackoverflow
 * cplusplus.com
 * Google
-<<<<<<< HEAD
->>>>>>> ba54919... Update README.md
-=======
->>>>>>> b46eb14... all prepared
