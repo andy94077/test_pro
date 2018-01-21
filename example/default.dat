@@ -1,0 +1,6 @@
+test_pro 2.0
+~/swap_number
+~/test files
+.in
+0 5
+-Z -y -W80 --suppress-common-lines

@@ -8,4 +8,4 @@ all:$(EXE)
 $(EXE):$(OBJ)
 	$(CC) $(CXXFLAGS) $(OBJ) -o $(EXE)
 clean:
-	-@rm -f $(OBJ) $(EXE)
+	-@rm -f $(OBJ)
