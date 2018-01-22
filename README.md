@@ -1,5 +1,5 @@
 # test_pro
-A program to test your promgram.
+A program to test your program.
 
 ## Getting Started
 
@@ -24,7 +24,7 @@ You can also use pipeline | to redirect the output to another command. For insta
 It will use diff to compare answers, and if they are incorrect, it will output the first 10 lines.
 
 ### Note
-For Windows users, since you don't have diff, you can't use the diff feature. But you can copy the ```diff.exe``` from git bash, and then save it in the ```bin``` folder. You must put that folder into the same directory of test_pro.
+For Windows users, since you don't have diff, you can't use the diff feature. To solve this problem, you must launch test_pro only in git bash, or you can copy ```diff.exe``` and some dll files from git bash and then add diff.exe to the environment variables.
 
 ## Compilation
 
