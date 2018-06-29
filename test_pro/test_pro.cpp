@@ -160,8 +160,8 @@ bool write_bat(const string& exe_path, const string& file_dir, const string& fil
 	script << "for /L %%A in (" << start_num << ",1," << end_num << to_do;
 	script << "for %%A in (" << single_files << to_do;
 #else
-	script << "set -x\n" << cd << '\n';
-	const string to_do = "; do \"" + exe_path + "\" <\"$a\"" + filename_extension + " >\"$a_out.txt\"; done\n";
+	script << "#!/usr/bin/env bash\n" << "set -x\n" << cd << '\n';
+	const string to_do = "; do \"" + exe_path + "\" <\"$a\"\'" + filename_extension + "\' >\"$a\"\'_out.txt\'; done\n";
 	script << "for (( a = " << start_num << "; a <= " << end_num << "; a++ ))" << to_do;
 	script << "for a in " << single_files << to_do;
 #endif // _WIN32
@@ -212,18 +212,18 @@ void diff_answer(ifstream& your_ans, ifstream& correct_ans, const string &diff_o
 	if (pipeline_pos == string::npos)//no pipeline
 	{
 		if (system(test))
-			cout << '\n' << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\twrong answer\n\n";
+			cout << "\n\e[0m" << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\t\e[1;31mWA\e[0m\n\n";
 		else
-			cout << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\taccepted\n";
+			cout << "\e[0m" << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\t\e[1;32mAC\e[0m\n";
 	}
 	else
 	{
 		int test_result = system(test.substr(0, pipeline_pos)+">.test_pro_tmp");
 		system(test.substr(pipeline_pos + 1)+"<.test_pro_tmp");
 		if(test_result)
-			cout << '\n' << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\twrong answer\n\n";
+			cout << "\n\e[0m" << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\t\e[1;31mWA\e[0m\n\n";
 		else
-			cout << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\taccepted\n";
+			cout << "\e[0m" << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\t\e[1;32mAC\e[0m\n";
 	}
 }
 void init_check_ans(const string &file_dir, const string &filename, const string &diff_option)
