@@ -6,6 +6,7 @@
 using namespace std;
 const string diff_path = "diff ";
 #ifdef _WIN32
+#include <cstdlib>
 #define SYSTEMPAUSE system("pause")
 const string os_delim = "\\", shell_script = "out.bat";
 #else
@@ -53,10 +54,10 @@ void read_default(string& exe_path, string& file_dir, string& filename_extension
 	try
 	{
 		dat.ignore(numeric_limits<streamsize>::max(), '\n');//next line
-		if (!getline(dat, exe_path))							throw "exe path";
-		if (!getline(dat, file_dir))								throw "file directory";
+		if (!getline(dat, exe_path))				throw "exe path";
+		if (!getline(dat, file_dir))				throw "file directory";
 		if (!getline(dat, filename_extension))		throw "filename extension";
-		if (!(dat >> start_num >> end_num))		throw "range";
+		if (!(dat >> start_num >> end_num))			throw "range";
 	}
 	catch (const char *err)
 	{
@@ -117,7 +118,6 @@ void read_options(string& exe_path, string& file_dir, string& filename_extension
 			cerr << "unknown option\n";
 	}
 #ifndef _WIN32
-#include <cstdlib>
 	if (exe_path[0] == '~')
 	{
 		exe_path.erase(exe_path.begin());
@@ -136,7 +136,7 @@ bool write_bat(const string& exe_path, const string& file_dir, const string& fil
 #ifdef _WIN32
 	const string cd = "cd /d \"" + file_dir + '\"';
 #else
-	const string cd = (file_dir.find(' ') == string::npos) ? ("cd " + file_dir) : ("cd \"" + file_dir + '\"');
+	const string cd = "cd \'" + file_dir + '\'';
 #endif // _WIN32
 #ifdef DEBUG
 	cout << "cd#" << cd << "#\n";
@@ -153,17 +153,16 @@ bool write_bat(const string& exe_path, const string& file_dir, const string& fil
 		return false;
 	}
 
-#ifndef _WIN32
-	script << "set -x\n";//echo shell commands
-#endif //_WIN32
-	script << cd << '\n';
 #ifdef _WIN32
+	//echo shell commands
+	script << "@echo on\n" << cd << '\n';
 	const string to_do = ") do \"" + exe_path + "\" <%%A" + filename_extension + " >%%A_out.txt\n";
 	script << "for /L %%A in (" << start_num << ",1," << end_num << to_do;
 	script << "for %%A in (" << single_files << to_do;
 #else
-	const string to_do = "; do \"" + exe_path + "\" <\"$a\"" + filename_extension + " >\"$a\"_out.txt; done\n";
-	script << "for a in $(seq " << start_num << ' ' << end_num << ')' << to_do;
+	script << "set -x\n" << cd << '\n';
+	const string to_do = "; do \"" + exe_path + "\" <\"$a\"" + filename_extension + " >\"$a_out.txt\"; done\n";
+	script << "for (( a = " << start_num << "; a <= " << end_num << "; a++ ))" << to_do;
 	script << "for a in " << single_files << to_do;
 #endif // _WIN32
 	script.close();
@@ -204,20 +203,28 @@ void compare_answer(ifstream& your_ans, ifstream& correct_ans, const string& fil
 void diff_answer(ifstream& your_ans, ifstream& correct_ans, const string &diff_option, const string& my_ans_path, const string& correct_ans_path)
 {
 	//enclose the path in quotes
-	string test = diff_path + '\"' + correct_ans_path + "\" \"" + my_ans_path + "\" " + diff_option;
-	//if it's windows, enclose the whole command in quotes
-#ifdef _WIN32
-	test.insert(test.begin(), '\"');
-	test += '\"';
-#endif //_WIN32
+	string test = diff_path + '\'' + correct_ans_path + "\' \'" + my_ans_path + "\' " + diff_option;
 #ifdef DEBUG
 	cout << "test#" << test << "#\n";
 #endif // DEBUG
 
-	if (system(test))
-		cout << '\n' << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\twrong answer\n\n";
+	size_t pipeline_pos = test.find('|');
+	if (pipeline_pos == string::npos)//no pipeline
+	{
+		if (system(test))
+			cout << '\n' << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\twrong answer\n\n";
+		else
+			cout << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\taccepted\n";
+	}
 	else
-		cout << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\taccepted\n";
+	{
+		int test_result = system(test.substr(0, pipeline_pos)+">.test_pro_tmp");
+		system(test.substr(pipeline_pos + 1)+"<.test_pro_tmp");
+		if(test_result)
+			cout << '\n' << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\twrong answer\n\n";
+		else
+			cout << my_ans_path.substr(my_ans_path.find_last_of(os_delim) + 1) << "\taccepted\n";
+	}
 }
 void init_check_ans(const string &file_dir, const string &filename, const string &diff_option)
 {
@@ -280,7 +287,7 @@ int main()
 		exit(8);
 	}
 
-	//use script
+	//run script
 #ifdef _WIN32
 	system('\"' + file_dir + os_delim + shell_script + '\"');
 #else
@@ -302,6 +309,12 @@ int main()
 	stringstream single_file_ss(single_file);
 	while (single_file_ss >> str)
 		init_check_ans(file_dir, str, diff_option);
+
+#ifdef _WIN32
+	system("del .test_pro_tmp 2>nul");
+#else
+	system("rm -f .test_pro_tmp");
+#endif // _WIN32
 
 	SYSTEMPAUSE;
 	return 0;
