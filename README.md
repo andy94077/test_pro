@@ -1,7 +1,13 @@
 # test_pro
-A program to test your program.
+A program to test your program with some input and output file.
 
-## Getting Started
+## Installation
+Use the [makefile]( https://github.com/andy94077/test_pro/blob/master/test_pro/makefile).
+```
+make
+```
+
+## How to use
 
 You need to write some settings in the ```default.dat```. The program will read the data when initializing.
 ### Set the default.dat
@@ -26,9 +32,6 @@ It will use diff to compare answers, and if they are incorrect, it will output t
 ### Note
 For Windows users, since you don't have diff, you can't use the diff feature. To solve this problem, you must launch test_pro only in git bash, or you can copy ```diff.exe``` and some dll files from git bash and then add diff.exe to the environment variables.
 
-## Compilation
-
-Use the [makefile]( https://github.com/andy94077/test_pro/blob/master/test_pro/makefile).
 
 ## Examples
 To learn more about the examples, check out [example]( https://github.com/andy94077/test_pro/tree/master/example)
